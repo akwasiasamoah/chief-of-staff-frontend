@@ -1,0 +1,16 @@
+{
+  "name": "chief-of-staff-frontend",
+  "version": "1.0.0",
+  "description": "Chief of Staff AI Assistant Frontend",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "npx http-server -p 3000 -o"
+  },
+  "keywords": ["ai", "assistant", "dashboard", "briefing"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chief of Staff - AI Executive Assistant</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <style>
+      /* =================================================================== */
+      /* CSS STYLES - ALL IN ONE FILE */
+      /* =================================================================== */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --secondary: #64748b;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --border: #e2e8f0;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+
+      .page {
+        min-height: 100vh;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Login Page */
+      .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .login-card {
+        background: var(--bg-primary);
+        border-radius: 16px;
+        padding: 48px;
+        box-shadow: var(--shadow-lg);
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .logo h1 {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+      }
+
+      .logo p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 32px;
+      }
+
+      .features {
+        margin: 32px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .feature {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        text-align: left;
+      }
+
+      .feature .icon {
+        font-size: 1.5rem;
+      }
+
+      /* Header */
+      .header {
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 0;
+        box-shadow: var(--shadow);
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      /* OAuth Connection Banner */
+      .oauth-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .oauth-banner-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .oauth-icon {
+        font-size: 3rem;
+      }
+
+      .oauth-text {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .oauth-text strong {
+        font-size: 1.25rem;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .oauth-text p {
+        opacity: 0.9;
+        margin: 0;
+      }
+
+      .oauth-banner .btn-primary {
+        background: white;
+        color: #667eea;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+        white-space: nowrap;
+      }
+
+      .oauth-banner .btn-primary:hover {
+        transform: scale(1.05);
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 32px 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+      }
+
+      .stat-card {
+        background: var(--bg-primary);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+      }
+
+      .stat-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .tab {
+        background: none;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+      }
+
+      .tab.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* Tab Panels */
+      .tab-panel {
+        display: none;
+        background: var(--bg-primary);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      /* Filter Buttons */
+      .filter-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .filter-btn {
+        padding: 8px 16px;
+        background: var(--bg-tertiary);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .filter-btn.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      /* Briefs */
+      .briefs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .brief-card {
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 20px;
+        border-left: 4px solid var(--primary);
+        cursor: pointer;
+      }
+
+      .brief-card:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .brief-card.unread {
+        border-left-color: var(--success);
+        background: #ecfdf5;
+      }
+
+      .brief-title {
+        font-weight: 600;
+        font-size: 1.125rem;
+        margin-bottom: 8px;
+      }
+
+      .brief-type {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+      }
+
+      .brief-type.morning {
+        background: var(--warning);
+      }
+
+      .brief-content {
+        color: var(--text-secondary);
+        margin-top: 12px;
+      }
+
+      /* Buttons */
+      .btn-primary,
+      .btn-secondary {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 24px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+      }
+
+      .message {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 6px;
+        display: none;
+      }
+
+      .message.show {
+        display: block;
+      }
+
+      .message.success {
+        background: #ecfdf5;
+        color: var(--success);
+      }
+
+      .loading,
+      .empty-state {
+        text-align: center;
+        padding: 48px;
+        color: var(--text-secondary);
+      }
+
+      /* Events */
+      .event-card {
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 4px solid var(--primary);
+        margin-bottom: 12px;
+        display: flex;
+        gap: 16px;
+      }
+
+      .event-time {
+        font-weight: 600;
+        color: var(--primary);
+        min-width: 80px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .oauth-banner-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .oauth-text {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Page -->
+    <div id="login-page" class="page">
+      <div class="login-container">
+        <div class="login-card">
+          <div class="logo">
+            <h1>👨‍💼 Chief of Staff</h1>
+            <p>Your AI Executive Assistant</p>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <span class="icon">☀️</span>
+              <p>Daily morning briefs at 8 AM</p>
+            </div>
+            <div class="feature">
+              <span class="icon">🔔</span>
+              <p>Pre-meeting context 10 minutes before</p>
+            </div>
+            <div class="feature">
+              <span class="icon">📧</span>
+              <p>Email history with attendees</p>
+            </div>
+          </div>
+
+          <div
+            id="g_id_onload"
+            data-client_id="975237794512-et1an1vpqhv7v1cjc9s6s5evfniv2937.apps.googleusercontent.com"
+            data-callback="handleCredentialResponse"
+          ></div>
+          <div class="g_id_signin" data-type="standard"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="page hidden">
+      <header class="header">
+        <div class="header-content">
+          <h2>👨‍💼 Chief of Staff</h2>
+          <div class="user-info">
+            <img id="user-avatar" src="" alt="User" class="avatar" />
+            <span id="user-name"></span>
+            <button id="logout-btn" class="btn-secondary">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="container">
+          <!-- OAuth Connection Banner -->
+          <div id="oauth-banner" class="oauth-banner" style="display: none">
+            <div class="oauth-banner-content">
+              <div class="oauth-icon">🔐</div>
+              <div class="oauth-text">
+                <strong>Connect Your Calendar & Email</strong>
+                <p>
+                  To generate briefs, we need access to your Google Calendar and
+                  Gmail.
+                </p>
+              </div>
+              <button id="connect-google-btn" class="btn-primary">
+                Connect Google Account
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📅</div>
+              <div>
+                <p>Today's Meetings</p>
+                <p class="stat-value" id="meetings-count">-</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">📝</div>
+              <div>
+                <p>Unread Briefs</p>
+                <p class="stat-value" id="unread-count">-</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏰</div>
+              <div>
+                <p>Next Meeting</p>
+                <p class="stat-value" id="next-meeting">-</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tabs">
+            <button class="tab active" data-tab="briefs">📋 Briefs</button>
+            <button class="tab" data-tab="schedule">📅 Schedule</button>
+            <button class="tab" data-tab="settings">⚙️ Settings</button>
+          </div>
+
+          <!-- Briefs Tab -->
+          <div id="briefs-tab" class="tab-panel active">
+            <div class="panel-header">
+              <h3>Your Briefs</h3>
+              <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="morning">
+                  Morning
+                </button>
+                <button class="filter-btn" data-filter="meeting">
+                  Meetings
+                </button>
+              </div>
+            </div>
+            <div id="briefs-list" class="briefs-list">
+              <div class="loading">Loading briefs...</div>
+            </div>
+          </div>
+
+          <!-- Schedule Tab -->
+          <div id="schedule-tab" class="tab-panel">
+            <div class="panel-header">
+              <h3>Today's Schedule</h3>
+              <button id="refresh-schedule" class="btn-secondary">
+                🔄 Refresh
+              </button>
+            </div>
+            <div id="schedule-list">
+              <div class="loading">Loading schedule...</div>
+            </div>
+          </div>
+
+          <!-- Settings Tab -->
+          <div id="settings-tab" class="tab-panel">
+            <div class="panel-header">
+              <h3>Settings</h3>
+            </div>
+            <div class="settings-form">
+              <div class="form-group">
+                <label for="morning-time">Morning Brief Time</label>
+                <input type="time" id="morning-time" value="08:00" />
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" id="notifications-enabled" checked />
+                  Enable Notifications
+                </label>
+              </div>
+              <button id="save-settings" class="btn-primary">
+                Save Settings
+              </button>
+              <div id="settings-message" class="message"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* =================================================================== */
+      /* JAVASCRIPT - UPDATED FOR NEW BACKEND OAUTH FLOW */
+      /* =================================================================== */
+
+      const API_URL = "http://localhost:8000";
+      let currentUser = null;
+      let currentFilter = "all";
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        checkAuth();
+        checkOAuthCallback();
+        setupEventListeners();
+      });
+
+      function checkAuth() {
+        const user = localStorage.getItem("user");
+        if (user) {
+          currentUser = JSON.parse(user);
+          showDashboard();
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        document.getElementById("login-page").classList.remove("hidden");
+        document.getElementById("dashboard").classList.add("hidden");
+      }
+
+      function showDashboard() {
+        document.getElementById("login-page").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        document.getElementById("user-name").textContent = currentUser.name;
+        document.getElementById("user-avatar").src =
+          currentUser.picture || "https://via.placeholder.com/40";
+        loadDashboardData();
+      }
+
+      // Handle Google Sign-In - UPDATED
+      window.handleCredentialResponse = async function (response) {
+        try {
+          console.log("Handling Google Sign-In...");
+
+          // Verify token with Google directly
+          const verifyRes = await fetch(
+            "https://oauth2.googleapis.com/tokeninfo?id_token=" +
+              response.credential
+          );
+          const userInfo = await verifyRes.json();
+
+          console.log("User info:", userInfo);
+
+          if (!userInfo.email) {
+            throw new Error("Failed to get user email");
+          }
+
+          // Store user info
+          currentUser = {
+            email: userInfo.email,
+            name: userInfo.name || userInfo.email,
+            picture: userInfo.picture || "",
+            morning_brief_time: "08:00",
+            notifications_enabled: true,
+            has_calendar_access: false,
+          };
+
+          localStorage.setItem("user", JSON.stringify(currentUser));
+          console.log("Login successful!");
+          showDashboard();
+        } catch (error) {
+          console.error("Login error:", error);
+          alert("Login failed. Please try again.");
+        }
+      };
+
+      // Check for OAuth callback - UPDATED
+      function checkOAuthCallback() {
+        const params = new URLSearchParams(window.location.search);
+        const authStatus = params.get("auth");
+
+        if (authStatus === "success") {
+          console.log("OAuth callback: Success");
+          alert(
+            "✅ Successfully connected to Google! You can now use all features."
+          );
+
+          // Update user's calendar access status
+          if (currentUser) {
+            currentUser.has_calendar_access = true;
+            localStorage.setItem("user", JSON.stringify(currentUser));
+          }
+
+          // Clean URL
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+
+          // Reload data
+          if (currentUser) {
+            loadDashboardData();
+          }
+        } else if (authStatus === "error") {
+          console.log("OAuth callback: Error");
+          alert("❌ Failed to connect to Google. Please try again.");
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+        }
+      }
+
+      // Check if user has calendar access - UPDATED
+      async function checkCalendarAccess() {
+        if (!currentUser) return;
+
+        try {
+          // Check if stored user has calendar access
+          if (currentUser.has_calendar_access) {
+            document.getElementById("oauth-banner").style.display = "none";
+            return;
+          }
+
+          // Try to fetch user from backend to check real status
+          try {
+            const res = await fetch(
+              `${API_URL}/user/me?user_email=${encodeURIComponent(
+                currentUser.email
+              )}`
+            );
+            if (res.ok) {
+              const userData = await res.json();
+
+              if (userData.has_calendar_access) {
+                currentUser.has_calendar_access = true;
+                localStorage.setItem("user", JSON.stringify(currentUser));
+                document.getElementById("oauth-banner").style.display = "none";
+              } else {
+                document.getElementById("oauth-banner").style.display = "block";
+              }
+            } else {
+              // Backend doesn't have user yet, show banner
+              document.getElementById("oauth-banner").style.display = "block";
+            }
+          } catch (err) {
+            // If backend call fails, show banner to be safe
+            console.log("Could not check backend user status:", err);
+            document.getElementById("oauth-banner").style.display = "block";
+          }
+        } catch (error) {
+          console.error("Error checking calendar access:", error);
+          document.getElementById("oauth-banner").style.display = "block";
+        }
+      }
+
+      // Connect Google Account - UPDATED
+      async function connectGoogleAccount() {
+        try {
+          console.log("Requesting OAuth URL for:", currentUser.email);
+
+          const res = await fetch(
+            `${API_URL}/auth/google/url?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`
+          );
+
+          if (!res.ok) {
+            throw new Error("Failed to get OAuth URL");
+          }
+
+          const data = await res.json();
+          console.log("Got OAuth URL, redirecting...");
+
+          // Redirect to Google OAuth
+          window.location.href = data.auth_url;
+        } catch (error) {
+          console.error("Error connecting Google account:", error);
+          alert(
+            "Failed to connect Google account. Please try again.\n\nError: " +
+              error.message
+          );
+        }
+      }
+
+      async function loadDashboardData() {
+        await Promise.all([
+          loadStats(),
+          loadBriefs(),
+          loadSchedule(),
+          loadSettings(),
+          checkCalendarAccess(),
+        ]);
+      }
+
+      async function loadStats() {
+        try {
+          const scheduleRes = await fetch(
+            `${API_URL}/schedule/today?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`
+          );
+          const scheduleData = await scheduleRes.json();
+          const events = scheduleData.events || [];
+
+          const briefsRes = await fetch(
+            `${API_URL}/briefs?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`
+          );
+          const briefs = await briefsRes.json();
+
+          document.getElementById("meetings-count").textContent = events.length;
+          document.getElementById("unread-count").textContent = briefs.filter(
+            (b) => !b.read
+          ).length;
+
+          if (events.length > 0) {
+            const time = new Date(
+              events[0].start.dateTime || events[0].start.date
+            );
+            document.getElementById("next-meeting").textContent =
+              time.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+          } else {
+            document.getElementById("next-meeting").textContent = "None";
+          }
+        } catch (error) {
+          console.error("Error loading stats:", error);
+          document.getElementById("meetings-count").textContent = "0";
+          document.getElementById("unread-count").textContent = "0";
+          document.getElementById("next-meeting").textContent = "-";
+        }
+      }
+
+      async function loadBriefs() {
+        try {
+          const res = await fetch(
+            `${API_URL}/briefs?user_email=${encodeURIComponent(
+              currentUser.email
+            )}&limit=50`
+          );
+          const briefs = await res.json();
+          displayBriefs(briefs);
+        } catch (error) {
+          console.error("Error loading briefs:", error);
+          document.getElementById("briefs-list").innerHTML =
+            '<div class="empty-state">📭<br>No briefs yet. Connect your Google account to start generating briefs!</div>';
+        }
+      }
+
+      function displayBriefs(briefs) {
+        const briefsList = document.getElementById("briefs-list");
+        let filtered =
+          currentFilter === "all"
+            ? briefs
+            : briefs.filter((b) => b.brief_type === currentFilter);
+
+        if (filtered.length === 0) {
+          briefsList.innerHTML =
+            '<div class="empty-state">📭<br>No briefs yet. They will appear here once generated!</div>';
+          return;
+        }
+
+        briefsList.innerHTML = filtered
+          .map(
+            (brief) => `
+                <div class="brief-card ${
+                  !brief.read ? "unread" : ""
+                }" data-brief-id="${brief.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <div class="brief-title">${escapeHtml(
+                              brief.title
+                            )}</div>
+                            <small style="color: var(--text-secondary);">${formatDate(
+                              brief.created_at
+                            )}</small>
+                        </div>
+                        <span class="brief-type ${brief.brief_type}">${
+              brief.brief_type
+            }</span>
+                    </div>
+                    <div class="brief-content">${escapeHtml(
+                      brief.content.substring(0, 200)
+                    )}${brief.content.length > 200 ? "..." : ""}</div>
+                </div>
+            `
+          )
+          .join("");
+
+        document.querySelectorAll(".brief-card").forEach((card) => {
+          card.addEventListener("click", () =>
+            showBriefDetail(card.dataset.briefId)
+          );
+        });
+      }
+
+      async function showBriefDetail(briefId) {
+        try {
+          const res = await fetch(
+            `${API_URL}/briefs/${briefId}?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`
+          );
+          const brief = await res.json();
+
+          await fetch(
+            `${API_URL}/briefs/${briefId}/read?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`,
+            { method: "PATCH" }
+          );
+
+          alert(`${brief.title}\n\n${brief.content}`);
+          loadBriefs();
+          loadStats();
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function loadSchedule() {
+        try {
+          const res = await fetch(
+            `${API_URL}/schedule/today?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`
+          );
+          const data = await res.json();
+          const events = data.events || [];
+
+          const scheduleList = document.getElementById("schedule-list");
+          if (events.length === 0) {
+            if (data.has_access === false) {
+              scheduleList.innerHTML =
+                '<div class="empty-state">🔐<br>Connect your Google account to see your schedule</div>';
+            } else {
+              scheduleList.innerHTML =
+                '<div class="empty-state">📅<br>No meetings today</div>';
+            }
+            return;
+          }
+
+          scheduleList.innerHTML = events
+            .map((event) => {
+              const time = new Date(event.start.dateTime || event.start.date);
+              const attendees = event.attendees || [];
+              return `
+                        <div class="event-card">
+                            <div class="event-time">${time.toLocaleTimeString(
+                              [],
+                              { hour: "2-digit", minute: "2-digit" }
+                            )}</div>
+                            <div>
+                                <div style="font-weight: 600;">${escapeHtml(
+                                  event.summary || "No Title"
+                                )}</div>
+                                ${
+                                  attendees.length > 0
+                                    ? `<small>👥 ${attendees.length} attendee(s)</small>`
+                                    : ""
+                                }
+                            </div>
+                        </div>
+                    `;
+            })
+            .join("");
+        } catch (error) {
+          console.error("Error loading schedule:", error);
+          document.getElementById("schedule-list").innerHTML =
+            '<div class="empty-state">🔐<br>Connect your Google account to see your schedule</div>';
+        }
+      }
+
+      async function loadSettings() {
+        document.getElementById("morning-time").value =
+          currentUser.morning_brief_time || "08:00";
+        document.getElementById("notifications-enabled").checked =
+          currentUser.notifications_enabled !== false;
+      }
+
+      async function saveSettings() {
+        const morningTime = document.getElementById("morning-time").value;
+        const notificationsEnabled = document.getElementById(
+          "notifications-enabled"
+        ).checked;
+
+        try {
+          const res = await fetch(
+            `${API_URL}/user/settings?user_email=${encodeURIComponent(
+              currentUser.email
+            )}`,
+            {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                morning_brief_time: morningTime,
+                notifications_enabled: notificationsEnabled,
+              }),
+            }
+          );
+
+          if (res.ok) {
+            currentUser.morning_brief_time = morningTime;
+            currentUser.notifications_enabled = notificationsEnabled;
+            localStorage.setItem("user", JSON.stringify(currentUser));
+            showMessage("settings-message", "Settings saved!", "success");
+          } else {
+            showMessage(
+              "settings-message",
+              "Note: Settings will be saved when you connect Google account",
+              "success"
+            );
+          }
+        } catch (error) {
+          console.error("Error saving settings:", error);
+          // Still update locally
+          currentUser.morning_brief_time = morningTime;
+          currentUser.notifications_enabled = notificationsEnabled;
+          localStorage.setItem("user", JSON.stringify(currentUser));
+          showMessage("settings-message", "Settings saved locally!", "success");
+        }
+      }
+
+      function showMessage(elementId, text, type) {
+        const element = document.getElementById(elementId);
+        element.textContent = text;
+        element.className = `message show ${type}`;
+        setTimeout(() => element.classList.remove("show"), 3000);
+      }
+
+      function setupEventListeners() {
+        document.getElementById("logout-btn").addEventListener("click", () => {
+          localStorage.removeItem("user");
+          currentUser = null;
+          showLogin();
+        });
+
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const targetTab = tab.dataset.tab;
+            document
+              .querySelectorAll(".tab")
+              .forEach((t) => t.classList.remove("active"));
+            document
+              .querySelectorAll(".tab-panel")
+              .forEach((p) => p.classList.remove("active"));
+            tab.classList.add("active");
+            document.getElementById(`${targetTab}-tab`).classList.add("active");
+          });
+        });
+
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            currentFilter = btn.dataset.filter;
+            document
+              .querySelectorAll(".filter-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            loadBriefs();
+          });
+        });
+
+        document
+          .getElementById("refresh-schedule")
+          .addEventListener("click", loadSchedule);
+        document
+          .getElementById("save-settings")
+          .addEventListener("click", saveSettings);
+        document
+          .getElementById("connect-google-btn")
+          .addEventListener("click", connectGoogleAccount);
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 1) return "Just now";
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString();
+      }
+    </script>
+  </body>
+</html>
