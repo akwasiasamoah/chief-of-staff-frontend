@@ -558,6 +558,112 @@
             border-radius: 0 0 12px 12px;
         }
 
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 320px;
+            max-width: 400px;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast.closing {
+            animation: slideOutRight 0.3s ease;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toast-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
         /* Events */
         .event-card {
             background: var(--bg-secondary);
@@ -577,6 +683,9 @@
     </style>
 </head>
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
     <!-- Login Page -->
     <div id="login-page" class="page">
         <div class="login-container">
@@ -812,7 +921,7 @@
                 
             } catch (error) {
                 console.error('Sign-in error:', error);
-                alert('Sign-in failed. Please try again.\n\nError: ' + error.message);
+                showToast('error', 'Sign-in Failed', 'Please try again. Error: ' + error.message);
             }
         }
 
@@ -846,8 +955,8 @@
                             // Clean URL
                             window.history.replaceState({}, document.title, window.location.pathname);
                             
-                            // Show success and load dashboard
-                            alert('✅ Successfully signed in! Your briefs will start generating automatically.');
+                            // Show success toast and load dashboard
+                            showToast('success', 'Successfully signed in!', 'Your briefs will start generating automatically.');
                             showDashboard();
                         })
                         .catch(error => {
@@ -876,7 +985,7 @@
                 }
             } else if (authStatus === 'error') {
                 console.log('OAuth error');
-                alert('❌ Sign-in failed. Please try again.');
+                showToast('error', 'Sign-in Failed', 'Please try again or contact support.');
                 window.history.replaceState({}, document.title, window.location.pathname);
                 showLogin();
             }
@@ -1019,6 +1128,48 @@
             if (modal) {
                 modal.remove();
                 document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Toast Notification System
+        function showToast(type, title, message, duration = 5000) {
+            const container = document.getElementById('toast-container');
+            
+            // Icon based on type
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            const icon = icons[type] || icons.info;
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    ${message ? `<div class="toast-message">${message}</div>` : ''}
+                </div>
+                <button class="toast-close" onclick="closeToast(this)">×</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto remove after duration
+            setTimeout(() => {
+                closeToast(toast.querySelector('.toast-close'));
+            }, duration);
+        }
+        
+        function closeToast(button) {
+            const toast = button.closest('.toast');
+            if (toast) {
+                toast.classList.add('closing');
+                setTimeout(() => toast.remove(), 300);
             }
         }
         
