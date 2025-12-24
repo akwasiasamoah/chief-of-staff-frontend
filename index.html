@@ -434,6 +434,130 @@
             color: var(--text-secondary);
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .brief-content-formatted {
+            line-height: 1.8;
+        }
+
+        .brief-content-formatted p {
+            margin-bottom: 16px;
+        }
+
+        .brief-content-formatted strong {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .brief-content-formatted ul {
+            margin: 16px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .brief-content-formatted li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+        }
+
+        .brief-content-formatted li::before {
+            content: "•";
+            position: absolute;
+            left: 12px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .brief-content-formatted hr {
+            border: none;
+            border-top: 2px solid var(--border);
+            margin: 20px 0;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            background: var(--bg-secondary);
+            border-radius: 0 0 12px 12px;
+        }
+
         /* Events */
         .event-card {
             background: var(--bg-secondary);
@@ -838,12 +962,87 @@
                 
                 await fetch(`${API_URL}/briefs/${briefId}/read?user_email=${encodeURIComponent(currentUser.email)}`, { method: 'PATCH' });
                 
-                alert(`${brief.title}\n\n${brief.content}`);
+                // Show beautiful modal instead of alert
+                showBriefModal(brief);
+                
                 loadBriefs();
                 loadStats();
             } catch (error) {
                 console.error('Error:', error);
             }
+        }
+        
+        function showBriefModal(brief) {
+            // Format the content with proper line breaks and structure
+            const formattedContent = formatBriefContent(brief.content);
+            
+            // Get emoji based on brief type
+            const emoji = brief.brief_type === 'morning' ? '☀️' : '📅';
+            
+            // Create modal HTML
+            const modalHTML = `
+                <div class="modal-overlay" id="brief-modal" onclick="closeBriefModal(event)">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <h2>${emoji} ${brief.title}</h2>
+                            <button class="modal-close" onclick="closeBriefModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="brief-content-formatted">
+                                ${formattedContent}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" onclick="closeBriefModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to page
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeBriefModal(event) {
+            if (event && event.target.classList.contains('modal-overlay')) {
+                // Only close if clicking overlay
+            } else if (!event) {
+                // Called from button
+            } else {
+                return; // Don't close if clicking inside modal
+            }
+            
+            const modal = document.getElementById('brief-modal');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        function formatBriefContent(content) {
+            // Convert markdown-style formatting to HTML
+            let formatted = content
+                // Convert **text** to bold
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                // Convert *text* to italic
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                // Convert --- to horizontal rule
+                .replace(/^---$/gm, '<hr>')
+                // Convert bullet points
+                .replace(/^[\*\-]\s+(.+)$/gm, '<li>$1</li>')
+                // Convert numbered lists
+                .replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>')
+                // Wrap consecutive list items in ul
+                .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+                // Convert double line breaks to paragraphs
+                .replace(/\n\n/g, '</p><p>')
+                // Convert single line breaks to <br>
+                .replace(/\n/g, '<br>');
+            
+            return `<p>${formatted}</p>`;
         }
 
         async function loadSchedule() {
